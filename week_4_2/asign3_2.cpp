@@ -31,31 +31,31 @@ int solution(string my_string)
     int answer = 0;
     string connect = "";
 
-    for (int i = 0; i < my_string.size() - 1; i++)
+    for (int i = 0; i < my_string.size(); i++)
     {
-        if (my_string[i] < 58 && ((my_string[i + 1] > 58) || my_string[i + 1] == my_string[my_string.size() - 1])) // 현재는 숫자, 다음은 문자인 경우 또는 문자열 마지막인 경우
+        if (my_string[i] >= '0' && my_string[i] <= '9') // 현재는 숫자, 다음은 문자인 경우 또는 문자열 마지막인 경우
         {
             connect += my_string[i];
-            // 문자열의 마지막이라면
-            if (my_string[i + 1] == my_string[my_string.size() - 1] && my_string[i + 1] < 58)
-            {
-                connect += my_string[i + 1];
-            }
-
             cout << "connect: " << connect << endl;
+        }
+        if ((my_string[i] < '0' || my_string[i] > '9') && connect != "")
+        {
             answer += makeInteger(connect);
             connect = "";
             cout << answer << endl;
         }
-        else if (my_string[i] < 58 && my_string[i + 1] < 58)
-        {
-            connect += my_string[i];
-        }
     }
+
+    if (connect != "")
+    {
+        answer += makeInteger(connect);
+    }
+
+    cout << "answer: " << answer << endl;
     return answer;
 }
 
 int main()
 {
-    solution("asdfasdfasdfasdfasdfasdfasdfasdfas1000as1234df");
+    solution("1a2b3c4d1234");
 }
