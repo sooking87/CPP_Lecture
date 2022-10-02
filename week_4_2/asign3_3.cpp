@@ -15,27 +15,19 @@ vector<int> solution(vector<string> keyinput, vector<int> board)
     int min_y = -max_y;
     for (int i = 0; i < keyinput.size(); i++)
     {
-        if (x == max_x || x == min_x)
-        {
-            continue;
-        }
-        if (y == max_y || y == min_y)
-        {
-            continue;
-        }
-        if (keyinput[i] == "left")
+        if (keyinput[i] == "left" && x > min_x)
         {
             x--;
         }
-        if (keyinput[i] == "right")
+        if (keyinput[i] == "right" && x < max_x)
         {
             x++;
         }
-        if (keyinput[i] == "up")
+        if (keyinput[i] == "up" && y < max_y)
         {
             y++;
         }
-        if (keyinput[i] == "down")
+        if (keyinput[i] == "down" && y > min_y)
         {
             y--;
         }
