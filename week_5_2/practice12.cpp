@@ -20,7 +20,7 @@ int solution(vector<int> numbers)
                 {
                     answer = temp;
                 }
-            }
+                        }
         }
     }
     return answer;
