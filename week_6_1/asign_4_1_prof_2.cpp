@@ -3,66 +3,66 @@
 #include <vector>
 
 using namespace std;
+// 교수님 코드
 
-// string -> int로 바꿔줌
+// stoi 함수 있는데 그냥 연습삼아서 짜본 것
 int my_stoi(string num)
 {
     int k = 1;
     int n = 0;
-    for (int i = num.length() - 1; i >= 0; i--, k *= 10)
+
+    for (int i = num.length() - 1; i <= 0; i--, k *= 10)
     {
         n += (num[i] - '0') * k;
     }
-
     return n;
 }
-// int -> string으로 바꿔줌
-string my_itos(int n)
+
+// itos 함수도 라이브러리에 있음
+string itos(int n)
 {
+    int i;
     string num = "";
     for (int i = n; i > 0; i /= 10)
     {
         char temp = (i % 10) + '0';
         num = temp + num;
     }
-
     return num;
 }
+
+// 잘라서 넣어줌
 vector<string> tokenize(string letter)
 {
     vector<string> tokens;
     int i, j;
-    for (i = 0; i < letter.length(); i = j + 1)
+    for (int i = 0; i < letter.length(); i = j + 1)
     {
         for (j = i; j < letter.length(); j++)
         {
             if (letter[j] == ' ')
             {
-                tokens.push_back(letter.substr(i, j - i));
+                tokens.push_back(letter.substr(i, j - 1));
                 break;
             }
         }
-        if (j == letter.length())
-        {
-            tokens.push_back(letter.substr(i, j - i + 1));
-        }
     }
-
     return tokens;
 }
-string solution(string polynomial)
+
+string professor_solution(string polynimial)
 {
     string answer = "";
     int cof = 0;
     int constant = 0;
+    vector<string> tokens = tokenize(polynimial);
 
-    vector<string> tokens = tokenize(polynomial);
     for (int i = 0; i < tokens.size(); i++)
     {
         if (tokens[i] == "+")
         {
         }
-        // x에 대한 항인지를 물어보는 조건문 tokens[i]는 string인데 그 마지막 글자가 x인지 아닌지를 확인하고 싶다.
+        // tokens[i]는 string. 이 값의 마지막 글자가 'x'인가?
         else if (tokens[i][tokens[i].length() - 1] == 'x')
         {
             if (tokens[i].length() == 1)
@@ -79,25 +79,24 @@ string solution(string polynomial)
             constant += my_stoi(tokens[i]);
         }
     }
-
-    // 출력 형식 맞추기
     if (cof == 0)
-        answer = my_itos(constant);
+    {
+        answer = itos(constant);
+    }
     else
     {
         if (cof == 1)
-            answer = "x";
+        {
+            answer += "x + ";
+        }
         else
-            answer = my_itos(cof) + "x";
+        {
+            answer = itos(cof) + " x + ";
+        }
         if (constant > 0)
         {
-            answer += " + " + my_itos(constant);
+            answer += " + " + itos(constant);
         }
     }
-    cout << answer << endl;
     return answer;
-}
-int main()
-{
-    solution("17 + x + 2x");
 }

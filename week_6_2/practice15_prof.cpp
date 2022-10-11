@@ -62,7 +62,7 @@ string solution(string letter)
     // }
 
     int j, i; // scope문제로 인해서 이렇게 바꾸었다. j가 포문 안에 있다면 무의미한 j가 이씩 때ㅜㅁㄴ이다.
-    for (i = 0; i < letter.length(); i = j + 1)
+    for (i = 0; i < letter.length() - 1; i = j + 1)
     {
         for (j = i; j < letter.length(); j++)
         {
