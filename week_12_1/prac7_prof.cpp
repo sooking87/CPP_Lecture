@@ -38,5 +38,5 @@ ostream &operator<<(ostream &os, const PhoneNumber &p)
 int main()
 {
     PhoneNumber pn("01022233333");
-    cout << pn << masked;
+    cout << pn << endl;
 }
