@@ -1,107 +1,78 @@
-#include <string>
-#include <vector>
 #include <iostream>
-#include <algorithm>
+#include <vector>
+#include <string>
 
 using namespace std;
 
-/* 최고점 받은 사람들 중에서 k등인 사람 */
-class Test
+class MyString
 {
-protected:
-    int k;
-    vector<int> score;
-    vector<int> getList(vector<int> &score, int n);
-    virtual int kBeforeIdx(vector<int> vec);
-    virtual int kAfterIdx(vector<int> vec);
-    int size();
+private:
+    char *pstr;
+    void initPstr();
 
 public:
-    Test(int k, vector<int> score);
-    vector<int> solution();
-    friend ostream &operator<<(ostream &os, vector<int> s);
+    MyString();
+    void setString(char *t);
+    int length();
+    friend ostream &operator<<(ostream &os, MyString fs);
 };
-/* 최하점 받은 사람들 중에서 k등인 사람 */
-class Test2 : public Test
-{
-protected:
-    virtual int kBeforeIdx(vector<int> vec);
-    virtual int kAfterIdx(vector<int> vec);
 
+class FiveString : public MyString
+{
 public:
-    Test2(int k, vector<int> score);
+    bool solve();
 };
-/* Test 정의 */
-Test::Test(int k, vector<int> area)
-{
-    this->k = k;
-    this->score = area;
-}
-vector<int> Test::getList(vector<int> &score, int n)
-{
-    vector<int> temp(score.begin(), score.begin() + n + 1);
-    sort(temp.begin(), temp.end());
-    return temp;
-}
-int Test::kBeforeIdx(vector<int> vec)
-{
-    return 0;
-}
-int Test::kAfterIdx(vector<int> vec)
-{
-    return vec.size() - k;
-}
-int Test::size()
-{
-    int len = score.size();
 
-    return len;
-}
-vector<int> Test::solution()
+MyString::MyString()
 {
-    vector<int> answer;
-    for (int i = 0; i < score.size(); i++)
+    pstr = NULL;
+    initPstr();
+}
+void MyString::initPstr()
+{
+    pstr = new char[10];
+}
+void MyString::setString(char *t)
+{
+    for (int i = 0; i < 10; i++)
     {
-        vector<int> nList = getList(score, i); // i 번째까지 중 명예의 전당 리스트 뽑기
-        if (i < k)
+        pstr[i] = t[i];
+        if (t[i] == '\0')
         {
-            answer.push_back(nList[kBeforeIdx(nList)]);
-        }
-        else
-        {
-            answer.push_back(nList[kAfterIdx(nList)]);
+            break;
         }
     }
-    return answer;
 }
-ostream &operator<<(ostream &os, vector<int> s)
+int MyString::length()
 {
-    os << "List of Score: ";
-    for (int i = 0; i < s.size(); i++)
+    int i;
+    for (i = 0;; i++)
     {
-        os << s[i] << ", ";
+        if (pstr[i] == '\0')
+        {
+            break;
+        }
     }
-    os << endl;
+    return i;
 }
-/* Test2 정의 */
-Test2::Test2(int k, vector<int> score) : Test(k, score)
+bool FiveString::solve()
 {
-    ;
+    for (int i = 0;; i++)
+    {
+        if (pstr[i])
+    }
 }
-int Test2::kBeforeIdx(vector<int> vec)
+ostream &operator<<(ostream &os, MyString fs)
 {
-    return vec.size() - 1;
+    os << fs.pstr;
+
+    return os;
 }
-int Test2::kAfterIdx(vector<int> vec)
-{
-    return k - 1;
-}
+
 int main()
 {
-    Test t(3, {10, 100, 20, 150, 1, 100, 200});
-    Test2 t2(3, {10, 100, 20, 150, 1, 100, 200});
-    vector<int> answer = t.solution();
-    vector<int> answer2 = t2.solution();
-    cout << answer;
-    cout << answer2;
+    FiveString my;
+    my.setString("1234");
+    cout << my.length() << ":" << my << ":" << my.solve() << endl;
+    return 0;
 }
