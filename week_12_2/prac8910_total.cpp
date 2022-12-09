@@ -93,7 +93,7 @@ P8::P8(int n) : P(n)
 }
 int P8::solution()
 {
-    cout << "P8 solution" << endl;
+    // cout << "P8 solution" << endl;
     int count = 0;
     for (int i = 2; i <= n; i++)
     {
@@ -112,7 +112,7 @@ P10::P10(int n) : P8(n)
 // 오버라이드를 하게 된다면 p8의 솔루션은 가상 함수가 아니므로 포인터를 만들어서 p8을 가리키는 포인터가 p10을 new해서 받을 수 ㅣㅇㅆ는데 그렇게 된다면 p8게 호출이 되기 때문에 그런 관계를 고려해서 함수를 만들게 된다며 ㄴ p8의 solution 함수를 가상함수로 만든다.
 int P10::solution()
 {
-    cout << "P10 solution" << endl;
+    // cout << "P10 solution" << endl;
     int sum = 0;
     for (int i = 1; i <= n; i++)
     {
@@ -129,7 +129,7 @@ P9::P9(int n, int m) : P(n)
 }
 int P9::solution()
 {
-    cout << "P9 solution" << endl;
+    // cout << "P9 solution" << endl;
     int gcd = 1;
     for (int i = 2; i <= n; i++)
     {
@@ -145,7 +145,7 @@ P92::P92(int n, int m) : P9(n, m)
 }
 int P92::solution()
 {
-    cout << "P92 solution" << endl;
+    // cout << "P92 solution" << endl;
     int gcd = P9::solution(); // 오버 라이드 하는 중에 부모꺼를 그대로 사용하고 시으면 왼쪽처럼 사용하면 된다.
     return n * m / gcd;
 }
@@ -158,9 +158,9 @@ int main()
     cout << "12: " << Utility::isPrime(12) << endl;
     P8 p81(10);
 
-    first = new P8(12);
+    first = new P8(10);
     second = new P8(5);
-    cout << "P8, 12: " << first->solution() << endl;
+    cout << "P8, 10: " << first->solution() << endl;
     cout << "P8, 5: " << second->solution() << endl;
     delete first;
     delete second;

@@ -1,78 +1,188 @@
-#include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
+#include <iostream>
 
 using namespace std;
 
-class MyString
+class Util
+{
+public:
+    static bool isDiv(int num1, int num2);
+    static bool isPrime(int num);
+};
+/* P 선언 */
+class P
+{
+protected:
+    int n;
+
+public:
+    P(int n);
+    virtual int solution() = 0;
+};
+/* P8 선언 */
+class P8 : public P
+{
+public:
+    P8(int n);
+    virtual int solution();
+};
+/* P9 선언 */
+class P9 : public P
 {
 private:
-    char *pstr;
-    void initPstr();
+    int m;
 
 public:
-    MyString();
-    void setString(char *t);
-    int length();
-    friend ostream &operator<<(ostream &os, MyString fs);
+    P9(int n, int m);
+    virtual int solution();
 };
+/* P92 선언 */
+class P92 : public P9
+{
+private:
+    int m;
 
-class FiveString : public MyString
+public:
+    P92(int n, int m);
+    virtual int solution();
+};
+/* P10 선언 */
+class P10 : public P
 {
 public:
-    bool solve();
+    P10(int n);
+    virtual int solution();
 };
-
-MyString::MyString()
+/* Util 정의 */
+bool Util::isDiv(int num1, int num2)
 {
-    pstr = NULL;
-    initPstr();
-}
-void MyString::initPstr()
-{
-    pstr = new char[10];
-}
-void MyString::setString(char *t)
-{
-    for (int i = 0; i < 10; i++)
+    if (num1 % num2 == 0)
     {
-        pstr[i] = t[i];
-        if (t[i] == '\0')
-        {
-            break;
-        }
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
-int MyString::length()
+bool Util::isPrime(int num)
 {
     int i;
-    for (i = 0;; i++)
+    for (i = 2; i < num; i++)
     {
-        if (pstr[i] == '\0')
-        {
+        if (Util::isDiv(num, i))
             break;
+    }
+    if (i == num)
+        return true;
+    else
+        return false;
+}
+/* P 정의 */
+P::P(int n)
+{
+    this->n = n;
+}
+/* P8 정의 */
+P8::P8(int n) : P(n)
+{
+    ;
+}
+int P8::solution()
+{
+    int cnt = 0;
+    for (int i = 2; i <= n; i++)
+    {
+        if (Util::isPrime(i))
+        {
+            cnt++;
         }
     }
-    return i;
+    return cnt;
 }
-bool FiveString::solve()
+/* P9 정의 */
+P9::P9(int n, int m) : P(n)
 {
-    for (int i = 0;; i++)
+    this->m = m;
+}
+int P9::solution()
+{
+    // 최대 공약수 구하기
+    int max = n > m ? n : m;
+    int min = n > m ? m : n;
+    for (int i = max;; i++)
     {
-        if (pstr[i])
+        if (Util::isDiv(i, max) && Util::isDiv(i, min))
+        {
+            return i;
+        }
     }
 }
-ostream &operator<<(ostream &os, MyString fs)
+/* P92 정의 */
+P92::P92(int n, int m) : P9(n, m)
 {
-    os << fs.pstr;
-
-    return os;
+    ;
 }
+int P92::solution()
+{
+    // 최소 공배수 구하기
+    int max = n > m ? n : m;
+    int min = n > m ? m : n;
 
+    for (int i = min; i > 0; i--)
+    {
+        if (Util::isDiv(max, i) && Util::isDiv(min, i))
+        {
+            return i;
+        }
+    }
+}
+/* P10 정의 */
+P10::P10(int n) : P(n)
+{
+    ;
+}
+int P10::solution()
+{
+    int sum = 0;
+    for (int i = 1; i <= n; i++)
+    {
+        if (Util::isDiv(n, i))
+        {
+            sum += i;
+        }
+    }
+    return sum;
+}
 int main()
 {
-    FiveString my;
-    my.setString("1234");
-    cout << my.length() << ":" << my << ":" << my.solve() << endl;
-    return 0;
+    P *first, *second;
+    first = new P8(10);
+    second = new P8(5);
+    cout << "P8, 10: " << first->solution() << endl;
+    cout << "P8, 5: " << second->solution() << endl;
+    delete first;
+    delete second;
+
+    first = new P10(12);
+    second = new P10(5);
+    cout << "p10, 12: " << first->solution() << endl;
+    cout << "p10, 5: " << second->solution() << endl;
+    delete first;
+    delete second;
+
+    first = new P9(12, 8);
+    second = new P9(12, 6);
+    cout << "p9, 12, 8: " << first->solution() << endl;
+    cout << "p9, 12, 6: " << second->solution() << endl;
+    delete first;
+    delete second;
+
+    first = new P92(12, 8);
+    second = new P92(12, 6);
+    cout << "p92, 12, 8: " << first->solution() << endl;
+    cout << "p92, 12, 6: " << second->solution() << endl;
+    delete first;
+    delete second;
 }
