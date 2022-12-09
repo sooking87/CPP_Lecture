@@ -4,185 +4,62 @@
 
 using namespace std;
 
-class Util
-{
-public:
-    static bool isDiv(int num1, int num2);
-    static bool isPrime(int num);
-};
-/* P 선언 */
-class P
+class MarketList
 {
 protected:
-    int n;
+    vector<string> want;
+    vector<int> number;
 
 public:
-    P(int n);
-    virtual int solution() = 0;
+    MarketList(vector<string> want, vector<int> number);
+    bool operator==(vector<string> discountList);
 };
-/* P8 선언 */
-class P8 : public P
+MarketList::MarketList(vector<string> want, vector<int> number)
 {
-public:
-    P8(int n);
-    virtual int solution();
-};
-/* P9 선언 */
-class P9 : public P
-{
-private:
-    int m;
-
-public:
-    P9(int n, int m);
-    virtual int solution();
-};
-/* P92 선언 */
-class P92 : public P9
-{
-private:
-    int m;
-
-public:
-    P92(int n, int m);
-    virtual int solution();
-};
-/* P10 선언 */
-class P10 : public P
-{
-public:
-    P10(int n);
-    virtual int solution();
-};
-/* Util 정의 */
-bool Util::isDiv(int num1, int num2)
-{
-    if (num1 % num2 == 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    this->want = want;
+    this->number = number;
 }
-bool Util::isPrime(int num)
+bool MarketList::operator==(vector<string> discountList)
 {
+    vector<int> copy(number);
     int i;
-    for (i = 2; i < num; i++)
+    for (i = 0; i < discountList.size(); i++)
     {
-        if (Util::isDiv(num, i))
-            break;
-    }
-    if (i == num)
-        return true;
-    else
-        return false;
-}
-/* P 정의 */
-P::P(int n)
-{
-    this->n = n;
-}
-/* P8 정의 */
-P8::P8(int n) : P(n)
-{
-    ;
-}
-int P8::solution()
-{
-    int cnt = 0;
-    for (int i = 2; i <= n; i++)
-    {
-        if (Util::isPrime(i))
+        for (int j = 0; j < want.size(); j++)
         {
-            cnt++;
+            if (want[j] == discountList[i])
+            {
+                copy[j]--;
+            }
         }
     }
-    return cnt;
-}
-/* P9 정의 */
-P9::P9(int n, int m) : P(n)
-{
-    this->m = m;
-}
-int P9::solution()
-{
-    // 최대 공약수 구하기
-    int max = n > m ? n : m;
-    int min = n > m ? m : n;
-    for (int i = max;; i++)
+    for (int i = 0; i < copy.size(); i++)
     {
-        if (Util::isDiv(i, max) && Util::isDiv(i, min))
+        if (copy[i] != 0)
         {
-            return i;
+            return false;
         }
     }
+    return true;
 }
-/* P92 정의 */
-P92::P92(int n, int m) : P9(n, m)
+int solution(vector<string> want, vector<int> number, vector<string> discount)
 {
-    ;
-}
-int P92::solution()
-{
-    // 최소 공배수 구하기
-    int max = n > m ? n : m;
-    int min = n > m ? m : n;
-
-    for (int i = min; i > 0; i--)
+    int answer = 0;
+    // want의 number와 discount len10에 맞는지 확인.
+    MarketList list(want, number);
+    int i;
+    for (i = 0; i < discount.size() - 9; i++)
     {
-        if (Util::isDiv(max, i) && Util::isDiv(min, i))
+        vector<string> temp(discount.begin() + i, discount.begin() + 10 + i);
+        if (list == temp)
         {
-            return i;
+            answer++;
         }
     }
-}
-/* P10 정의 */
-P10::P10(int n) : P(n)
-{
-    ;
-}
-int P10::solution()
-{
-    int sum = 0;
-    for (int i = 1; i <= n; i++)
-    {
-        if (Util::isDiv(n, i))
-        {
-            sum += i;
-        }
-    }
-    return sum;
+    cout << answer << endl;
+    return answer;
 }
 int main()
 {
-    P *first, *second;
-    first = new P8(10);
-    second = new P8(5);
-    cout << "P8, 10: " << first->solution() << endl;
-    cout << "P8, 5: " << second->solution() << endl;
-    delete first;
-    delete second;
-
-    first = new P10(12);
-    second = new P10(5);
-    cout << "p10, 12: " << first->solution() << endl;
-    cout << "p10, 5: " << second->solution() << endl;
-    delete first;
-    delete second;
-
-    first = new P9(12, 8);
-    second = new P9(12, 6);
-    cout << "p9, 12, 8: " << first->solution() << endl;
-    cout << "p9, 12, 6: " << second->solution() << endl;
-    delete first;
-    delete second;
-
-    first = new P92(12, 8);
-    second = new P92(12, 6);
-    cout << "p92, 12, 8: " << first->solution() << endl;
-    cout << "p92, 12, 6: " << second->solution() << endl;
-    delete first;
-    delete second;
+    solution({"banana", "apple", "rice", "pork", "pot"}, {3, 2, 2, 2, 1}, {"chicken", "apple", "apple", "banana", "rice", "apple", "pork", "banana", "pork", "rice", "pot", "banana", "apple", "banana"});
 }
