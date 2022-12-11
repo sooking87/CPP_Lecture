@@ -4,62 +4,107 @@
 
 using namespace std;
 
-class MarketList
+class P11
 {
 protected:
-    vector<string> want;
-    vector<int> number;
+    int width;
+    int height;
+    vector<vector<int>> board;
+    int getArea(int top, int left);
+    bool isWhatIWant(int top, int left, int bottom, int right);
+    virtual bool isCorrectSize(int top, int left, int bottom, int right);
 
 public:
-    MarketList(vector<string> want, vector<int> number);
-    bool operator==(vector<string> discountList);
+    P11(vector<vector<int>> board);
+    int solution();
 };
-MarketList::MarketList(vector<string> want, vector<int> number)
+class P112 : public P11
 {
-    this->want = want;
-    this->number = number;
+    virtual bool isCorrectSize(int top, int left, int bottom, int right);
+
+public:
+    P112(vector<vector<int>> board);
+};
+/* P11 정의 */
+P11::P11(vector<vector<int>> board)
+{
+    this->board = board;
+    int width = board[0].size();
+    int height = board.size();
 }
-bool MarketList::operator==(vector<string> discountList)
+int P11::getArea(int top, int left)
 {
-    vector<int> copy(number);
-    int i;
-    for (i = 0; i < discountList.size(); i++)
+    int area = 0;
+    for (int i = top; i < height; i++)
     {
-        for (int j = 0; j < want.size(); j++)
+        for (int j = left; j < width; j++)
         {
-            if (want[j] == discountList[i])
+            if (isWhatIWant(top, left, i, j))
             {
-                copy[j]--;
+                area = (i - top + 1) * (j - left + 1);
             }
         }
     }
-    for (int i = 0; i < copy.size(); i++)
+    cout << "getArea area: " << area << endl;
+    return area;
+}
+bool P11::isWhatIWant(int top, int left, int bottom, int right)
+{
+    if (!isCorrectSize(top, left, bottom, right))
     {
-        if (copy[i] != 0)
+        return false;
+    }
+    for (int i = top; i <= bottom; i++)
+    {
+        for (int j = left; j <= right; j++)
         {
-            return false;
+            if (board[i][j] != 1)
+            {
+                return false;
+            }
         }
     }
     return true;
 }
-int solution(vector<string> want, vector<int> number, vector<string> discount)
+bool P11::isCorrectSize(int top, int left, int bottom, int right)
 {
-    int answer = 0;
-    // want의 number와 discount len10에 맞는지 확인.
-    MarketList list(want, number);
-    int i;
-    for (i = 0; i < discount.size() - 9; i++)
+    if ((bottom - top) != (right - left))
     {
-        vector<string> temp(discount.begin() + i, discount.begin() + 10 + i);
-        if (list == temp)
+        return false;
+    }
+    return true;
+}
+int P11::solution()
+{
+    int maxArea = 0;
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
         {
-            answer++;
+            int area = getArea(i, j);
+            if (area > maxArea)
+            {
+                maxArea = area;
+            }
         }
     }
-    cout << answer << endl;
-    return answer;
+    cout << maxArea << endl;
+    return maxArea;
+}
+/* P112 정의 */
+P112::P112(vector<vector<int>> board) : P11(board)
+{
+    ;
+}
+bool P112::isCorrectSize(int top, int left, int bottom, int right)
+{
+    return true;
 }
 int main()
 {
-    solution({"banana", "apple", "rice", "pork", "pot"}, {3, 2, 2, 2, 1}, {"chicken", "apple", "apple", "banana", "rice", "apple", "pork", "banana", "pork", "rice", "pot", "banana", "apple", "banana"});
+    P11 myp11({{1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}, {0, 0, 1, 0}});
+    myp11.solution();
+
+    P112 myp112({{1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}, {0, 0, 1, 0}});
+    myp112.solution();
 }

@@ -1,53 +1,113 @@
-#include <string>
-#include <vector>
 #include <iostream>
-
+#include <vector>
 using namespace std;
 
-class P5 : public string
+/* P11 */
+class P11
 {
+protected:
+    vector<vector<int>> table;
+    int width;
+    int height;
+    int getArea(int top, int left);
+    bool isWhatIWant(int top, int left, int bottom, int right);
+    virtual bool isCorrectSize(int top, int left, int bottom, int right);
+
 public:
-    P5(const char *a);
-    bool solve();
-    int length();
+    P11(vector<vector<int>> table);
+    int solution();
+};
+/* // 가장 넓은 직사각형 바꾸기 미션! */
+/* P112 */
+class P112 : public P11
+{
+    virtual bool isCorrectSize(int top, int left, int bottom, int right);
+
+public:
+    P112(vector<vector<int>> table);
 };
 
-P5::P5(const char *a) : string(a)
+/* P11 구현 */
+P11::P11(vector<vector<int>> table)
 {
-    ;
+    this->table = table;
+    this->width = table[0].size();
+    this->height = table.size();
 }
-
-int P5::length()
+int P11::solution()
 {
-    // 부모 멤버 함수를 사용하고 싶을 때.
-    return string::length() * 3;
-}
-
-bool P5::solve()
-{
-    int len = string::length();
-    cout << len << endl;
-    if (len == 4 || len == 6)
+    int maxarea = 0;
+    for (int i = 0; i < height; i++)
     {
-        for (int i = 0; i < len; i++)
+        for (int j = 0; j < width; j++)
         {
-            if ((*this)[i] < '0' || (*this)[i] > '9')
+            int area = getArea(i, j);
+            if (area > maxarea)
+            {
+                maxarea = area;
+            }
+        }
+    }
+    cout << maxarea << endl;
+    return maxarea;
+}
+int P11::getArea(int top, int left)
+{
+    int maxarea = 0;
+    cout << "getArea maxArea: " << maxarea << endl;
+    for (int j = left; j < width; j++)
+    {
+        for (int i = top; i < height; i++)
+        {
+            if (isWhatIWant(top, left, i, j))
+            {
+                int area = (i - top + 1) * (j - left + 1);
+                if (area > maxarea)
+                {
+                    maxarea = area;
+                }
+            }
+        }
+    }
+    return maxarea;
+}
+bool P11::isWhatIWant(int top, int left, int bottom, int right)
+{
+    if (!isCorrectSize(top, left, bottom, right))
+        return false;
+    for (int i = top; i <= bottom; i++)
+    {
+        for (int j = left; j <= right; j++)
+        {
+            if (table[i][j] != 1)
             {
                 return false;
             }
         }
     }
-    else
-    {
+    return true;
+}
+bool P11::isCorrectSize(int top, int left, int bottom, int right)
+{
+    if ((bottom - top) != (right - left))
         return false;
-    }
     return true;
 }
 
+/* P112 구현 */
+P112::P112(vector<vector<int>> table) : P11(table)
+{
+    ;
+}
+bool P112::isCorrectSize(int top, int left, int bottom, int right)
+{
+    return true;
+}
 int main()
 {
-    string s = "1234";
-    P5 my(s.c_str());
-    my.solve();
-    cout << my.length() << ":" << my << ":" << my.solve() << endl;
+    P11 myp11({{1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}, {0, 0, 1, 0}});
+    myp11.solution();
+
+    P112 myp112({{1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}, {0, 0, 1, 0}});
+    myp112.solution();
 }
