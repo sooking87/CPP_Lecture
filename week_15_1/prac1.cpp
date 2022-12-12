@@ -15,7 +15,7 @@ private:
 
 public:
     SevenSeg(int n);
-    friend ostream &operator<<(ostream &os, SevenSeg &s);
+    friend ostream &operator<<(ostream &os, SevenSeg &ss);
     friend ostream &operator<<(ostream &os, SevenSegs &ss);
 };
 class SevenSegs
@@ -27,9 +27,8 @@ private:
 
 public:
     SevenSegs(int n);
-    friend ostream &operator<<(ostream &os, SevenSegs &s);
+    friend ostream &operator<<(ostream &os, SevenSegs &ss);
 };
-
 /* SevenSeg 정의 */
 SevenSeg::SevenSeg(int n)
 {
@@ -38,10 +37,15 @@ SevenSeg::SevenSeg(int n)
 }
 void SevenSeg::Set()
 {
-    for (int i = 0; i < 15; i += 2)
-    {
-        seg[i] = ' ';
-    }
+    // 숫자를 이쁘게 만들어주기 위한 빈 공간
+    seg[0] = ' ';
+    seg[2] = ' ';
+    seg[4] = ' ';
+    seg[6] = ' ';
+    seg[8] = ' ';
+    seg[10] = ' ';
+    seg[12] = ' ';
+    seg[14] = ' ';
 
     if (n == 0 || n == 2 || n == 3 || n == 5 || n == 6 || n == 7 || n == 8 || n == 9)
         seg[1] = '-';
@@ -73,19 +77,28 @@ void SevenSeg::Set()
     else
         seg[11] = ' ';
 
-    if (n == 0 || n == 2 || n == 3 || n == 5 || n == 6 || n == 8 || n == 9)
+    if (n == 0 || n == 2 || n == 3 || n == 5 || n == 6 || n == 8)
         seg[13] = '-';
     else
         seg[13] = ' ';
 }
-ostream &operator<<(ostream &os, SevenSeg &s)
+ostream &
+operator<<(ostream &os, SevenSeg &ss)
 {
+    // for (int i = 0; i < 15; i++)
+    // {
+    //     if (i % 3 == 0)
+    //     {
+    //         os << endl;
+    //     }
+    //     os << ss.seg[i];
+    // }
     int k = 0;
     for (int i = 0; i < 5; i++)
     {
         for (int j = 0; j < 3; j++)
         {
-            os << s.seg[k++];
+            os << ss.seg[k++];
         }
         os << endl;
     }
@@ -105,15 +118,19 @@ void SevenSegs::Set()
         segs.push_back(temp);
     }
 }
-ostream &operator<<(ostream &os, SevenSegs &ss)
+ostream &
+operator<<(ostream &os, SevenSegs &ss)
 {
     int k = 0;
+
     for (int i = 0; i < 5; i++)
     {
         for (int j = ss.segs.size() - 1; j >= 0; j--)
         {
+
             for (int l = 0; l < 3; l++)
             {
+
                 os << ss.segs[j].seg[k + l];
             }
         }
@@ -124,11 +141,10 @@ ostream &operator<<(ostream &os, SevenSegs &ss)
 }
 int main()
 {
-    for (int i = 0; i < 10; i++)
-    {
-        SevenSeg s(i);
-        cout << s;
-    }
+    int n;
+    cin >> n;
+    SevenSeg s(n);
+    cout << s;
 
     int k;
     cin >> k;

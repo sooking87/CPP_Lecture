@@ -2,8 +2,9 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#include <stdlib.h>
-#include <time.h>
+/* for rand() */
+#include <stdlib.h> /* srand, rand */
+#include <time.h>   /* time */
 
 using namespace std;
 
@@ -16,7 +17,7 @@ private:
     int cell[9];
     int x, y;
     void shuffle();
-    int convert(int x, int y);
+    int convert(int x, int y); // 2차원을 1차원으로 바꾸어주는 함수
 
 public:
     Puzzle();
@@ -25,6 +26,7 @@ public:
     friend ostream &operator<<(ostream &os, Puzzle &pz);
 };
 
+/* Puzzle 정의 */
 Puzzle::Puzzle()
 {
     for (int i = 0; i < 8; i++)
@@ -42,7 +44,7 @@ void Puzzle::shuffle()
     int rn;
     for (int i = 0; i < 4; i++)
     {
-        rn = rand() % 4; // => 왜 4로 나눈 나머지지? : 이 랜덤 숫자를 통해서 4 방향중 하나를 정하기 때문이다.
+        rn = rand() % 4;
         try
         {
             switch (rn)
@@ -54,36 +56,37 @@ void Puzzle::shuffle()
                 move('d');
                 break;
             case 2:
-                move('r');
+                move('l');
                 break;
             case 3:
-                move('l');
+                move('r');
                 break;
             }
         }
-        catch (const notMovable &e)
+        catch (notMovable &e)
         {
         }
     }
 }
 int Puzzle::convert(int x, int y)
 {
-    return y * 3 + x;
+    return 3 * y + x;
 }
 void Puzzle::move(char c)
 {
-    int to, from; // 0을 기준으로 0이 이동해야되는데 to, 이동 전 위치가 from
+    int to, from;
     switch (c)
     {
     case 'u':
         if (y == 0)
             throw notMovable();
-        to = convert(x, y - 1); // 0을 위
+        to = convert(x, y - 1);
         from = convert(x, y);
-        cell[from] = cell[to]; // 0은 from 에서 to로 이동.
+        cell[from] = cell[to];
         cell[to] = 0;
         y--;
         break;
+
     case 'd':
         if (y == 2)
             throw notMovable();
@@ -119,28 +122,29 @@ bool Puzzle::isDone()
 {
     for (int i = 0; i < 8; i++)
     {
-        if (cell[i] != (i + 1))
+        if (cell[i] != i + 1)
+        {
             return false;
+        }
     }
-    if (cell[8] != 0)
+    if (cell[8] = 0)
         return false;
+
     return true;
 }
 ostream &operator<<(ostream &os, Puzzle &pz)
 {
     int k = 0;
-
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
         {
-            os << pz.cell[k++] << " ";
+            os << pz.cell[k++] << ' ';
         }
         os << endl;
     }
     return os;
 }
-
 int main()
 {
     Puzzle mypuzzle;
