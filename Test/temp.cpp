@@ -9,13 +9,13 @@ class P11
 protected:
     int width;
     int height;
-    vector<vector<int>> board;
+    vector<vector<int>> table;
     int getArea(int top, int left);
     bool isWhatIWant(int top, int left, int bottom, int right);
     virtual bool isCorrectSize(int top, int left, int bottom, int right);
 
 public:
-    P11(vector<vector<int>> board);
+    P11(vector<vector<int>> table);
     int solution();
 };
 class P112 : public P11
@@ -23,14 +23,14 @@ class P112 : public P11
     virtual bool isCorrectSize(int top, int left, int bottom, int right);
 
 public:
-    P112(vector<vector<int>> board);
+    P112(vector<vector<int>> table);
 };
 /* P11 정의 */
-P11::P11(vector<vector<int>> board)
+P11::P11(vector<vector<int>> table)
 {
-    this->board = board;
-    int width = board[0].size();
-    int height = board.size();
+    this->table = table;
+    this->width = table[0].size();
+    this->height = table.size();
 }
 int P11::getArea(int top, int left)
 {
@@ -45,7 +45,6 @@ int P11::getArea(int top, int left)
             }
         }
     }
-    cout << "getArea area: " << area << endl;
     return area;
 }
 bool P11::isWhatIWant(int top, int left, int bottom, int right)
@@ -58,7 +57,7 @@ bool P11::isWhatIWant(int top, int left, int bottom, int right)
     {
         for (int j = left; j <= right; j++)
         {
-            if (board[i][j] != 1)
+            if (table[i][j] != 1)
             {
                 return false;
             }
@@ -92,13 +91,13 @@ int P11::solution()
     return maxArea;
 }
 /* P112 정의 */
-P112::P112(vector<vector<int>> board) : P11(board)
-{
-    ;
-}
 bool P112::isCorrectSize(int top, int left, int bottom, int right)
 {
     return true;
+}
+P112::P112(vector<vector<int>> table) : P11(table)
+{
+    ;
 }
 int main()
 {
